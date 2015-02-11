@@ -28,4 +28,37 @@ class ViewController: UIViewController {
         operandStack.append(displayValue)
         displayEmpty = true
     }
+
+    @IBAction func operate(sender: UIButton) {
+        var operation = sender.currentTitle!
+        if !displayEmpty {
+            enter()
+        }
+        switch operation {
+        case "×": performOperation { $0 * $1 }
+        case "÷": performOperation { $1 / $0 }
+        case "+": performOperation { $0 + $1 }
+        case "−": performOperation { $1 - $0 }
+        case "√": performOperation { sqrt($0) }
+        default: break
+        }
+    }
+
+    func performOperation(operation: (Double, Double) -> Double) {
+        padStack(2)
+        displayValue = operation(operandStack.removeLast(), operandStack.removeLast())
+        enter()
+    }
+
+    func performOperation(operation: Double -> Double) {
+        padStack(1)
+        displayValue = operation(operandStack.removeLast())
+        enter()
+    }
+
+    func padStack(count: Int) {
+        while operandStack.count < count {
+            enter()
+        }
+    }
 }
