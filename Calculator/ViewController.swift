@@ -19,7 +19,7 @@ class ViewController: UIViewController {
         if displayEmpty {
             display.text = digit
             displayEmpty = false
-        } else {
+        } else if digit != "." || display.text?.rangeOfString(digit) == nil {
             display.text = display.text! + digit
         }
     }
