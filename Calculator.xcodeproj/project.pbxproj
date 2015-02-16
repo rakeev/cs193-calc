@@ -13,6 +13,7 @@
 		9F179C5B1A8A2820000CF02D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F179C5A1A8A2820000CF02D /* Images.xcassets */; };
 		9F179C5E1A8A2820000CF02D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F179C5C1A8A2820000CF02D /* LaunchScreen.xib */; };
 		9F179C761A8A2B3E000CF02D /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 9F179C751A8A2B3E000CF02D /* .gitignore */; };
+		9F179C781A917DFD000CF02D /* Calculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F179C771A917DFD000CF02D /* Calculator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		9F179C5A1A8A2820000CF02D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9F179C5D1A8A2820000CF02D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		9F179C751A8A2B3E000CF02D /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = SOURCE_ROOT; };
+		9F179C771A917DFD000CF02D /* Calculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Calculator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 			children = (
 				9F179C551A8A2820000CF02D /* ViewController.swift */,
 				9F179C571A8A2820000CF02D /* Main.storyboard */,
+				9F179C771A917DFD000CF02D /* Calculator.swift */,
 				9F179C511A8A2820000CF02D /* Supporting Files */,
 			);
 			path = Calculator;
@@ -148,6 +151,7 @@
 			files = (
 				9F179C561A8A2820000CF02D /* ViewController.swift in Sources */,
 				9F179C541A8A2820000CF02D /* AppDelegate.swift in Sources */,
+				9F179C781A917DFD000CF02D /* Calculator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

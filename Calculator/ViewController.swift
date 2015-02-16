@@ -2,7 +2,7 @@ import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet weak var display: UILabel!
-    var displayValue: Double {
+    private var displayValue: Double {
         get {
             return (display.text! as NSString).doubleValue
         }
@@ -11,8 +11,8 @@ class ViewController: UIViewController {
             displayEmpty = true
         }
     }
-    var displayEmpty = true
-    var operandStack = [Double]()
+    private var displayEmpty = true
+    private var calculator = Calculator()
 
     @IBAction func appendDigit(sender: UIButton) {
         let digit = sender.currentTitle!
@@ -25,8 +25,8 @@ class ViewController: UIViewController {
     }
 
     @IBAction func enter() {
-        operandStack.append(displayValue)
-        displayEmpty = true
+        calculator.pushOperand(displayValue)
+        evaluate()
     }
 
     @IBAction func operate(sender: UIButton) {
@@ -34,39 +34,17 @@ class ViewController: UIViewController {
         if !displayEmpty {
             enter()
         }
-        switch operation {
-        case "×": performOperation { $0 * $1 }
-        case "÷": performOperation { $1 / $0 }
-        case "+": performOperation { $0 + $1 }
-        case "−": performOperation { $1 - $0 }
-        case "sin": performOperation { sin($0) }
-        case "cos": performOperation { cos($0) }
-        case "√": performOperation { sqrt($0) }
-        case "π": performOperation { M_PI }
-        default: break
+        calculator.performOperation(operation)
+        evaluate()
+    }
+
+    private func evaluate()
+    {
+        if let result = calculator.evaluate() {
+            displayValue = result
+        } else {
+            displayValue = 0
         }
-    }
-
-    func performOperation(operation: (Double, Double) -> Double) {
-        padStack(2)
-        displayValue = operation(operandStack.removeLast(), operandStack.removeLast())
-        enter()
-    }
-
-    func performOperation(operation: Double -> Double) {
-        padStack(1)
-        displayValue = operation(operandStack.removeLast())
-        enter()
-    }
-
-    func performOperation(operation: () -> Double) {
-        displayValue = operation()
-        enter()
-    }
-
-    func padStack(count: Int) {
-        while operandStack.count < count {
-            enter()
-        }
+        displayEmpty = true
     }
 }
