@@ -3,6 +3,7 @@ import Foundation
 class Calculator {
     private enum Op: Printable {
         case Operand(Double)
+        case Constant(String, Double)
         case UnaryOperator(String, Double -> Double)
         case BinaryOperator(String, (Double, Double) -> Double)
 
@@ -10,6 +11,8 @@ class Calculator {
             switch self {
             case .Operand(let operand):
                 return "\(operand)"
+            case .Constant(let symbol, _):
+                return symbol
             case .UnaryOperator(let symbol, _):
                 return symbol
             case .BinaryOperator(let symbol, _):
@@ -25,6 +28,7 @@ class Calculator {
         func learnOp(op: Op) {
             knownOps[op.description] = op
         }
+        learnOp(.Constant("π", M_PI))
         learnOp(.BinaryOperator("×", *))
         learnOp(.BinaryOperator("÷", /))
         learnOp(.BinaryOperator("+", +))
@@ -55,6 +59,8 @@ class Calculator {
             let op = remainder.removeLast()
             switch op {
             case .Operand(let operand):
+                return (operand, remainder)
+            case .Constant(_, let operand):
                 return (operand, remainder)
             case .UnaryOperator(_, let operation):
                 let (operand, remainder) = evaluate(remainder)
