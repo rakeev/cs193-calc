@@ -80,4 +80,8 @@ class Calculator: Printable {
         }
         return (nil, ops)
     }
+
+    func reset() {
+        opStack.removeAll()
+    }
 }

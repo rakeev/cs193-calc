@@ -44,4 +44,10 @@ class ViewController: UIViewController {
         }
         history.text = "\(calculator)"
     }
+
+    @IBAction func reset() {
+        calculator.reset()
+        history.text = ""
+        displayValue = 0
+    }
 }
