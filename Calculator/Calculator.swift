@@ -1,6 +1,6 @@
 import Foundation
 
-class Calculator {
+class Calculator: Printable {
     private enum Op: Printable {
         case Operand(Double)
         case Constant(String, Double)
@@ -23,6 +23,9 @@ class Calculator {
 
     private var opStack = [Op]()
     private var knownOps = [String: Op]()
+    var description: String {
+        return " ".join(opStack.map { "\($0)" })
+    }
 
     init() {
         func learnOp(op: Op) {

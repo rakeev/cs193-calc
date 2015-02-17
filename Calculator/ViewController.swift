@@ -2,6 +2,7 @@ import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet weak var display: UILabel!
+    @IBOutlet weak var history: UILabel!
     private var displayValue: Double {
         get {
             return (display.text! as NSString).doubleValue
@@ -26,7 +27,8 @@ class ViewController: UIViewController {
 
     @IBAction func enter() {
         calculator.pushOperand(displayValue)
-        evaluate()
+        history.text = "\(calculator)"
+        displayEmpty = true
     }
 
     @IBAction func operate(sender: UIButton) {
@@ -35,16 +37,11 @@ class ViewController: UIViewController {
             enter()
         }
         calculator.performOperation(operation)
-        evaluate()
-    }
-
-    private func evaluate()
-    {
         if let result = calculator.evaluate() {
             displayValue = result
         } else {
             displayValue = 0
         }
-        displayEmpty = true
+        history.text = "\(calculator)"
     }
 }
