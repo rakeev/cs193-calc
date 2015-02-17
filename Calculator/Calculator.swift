@@ -59,7 +59,7 @@ class Calculator {
             case .UnaryOperator(_, let operation):
                 let (operand, remainder) = evaluate(remainder)
                 if let operand = operand {
-                    return (operand, remainder)
+                    return (operation(operand), remainder)
                 }
             case .BinaryOperator(_, let operation):
                 let (opRight, remRight) = evaluate(remainder)
