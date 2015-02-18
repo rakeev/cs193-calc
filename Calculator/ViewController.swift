@@ -45,6 +45,14 @@ class ViewController: UIViewController {
         history.text = "\(calculator) ="
     }
 
+    @IBAction func erase() {
+        if displayEmpty || countElements(display.text!) < 2 {
+            displayValue = 0
+            return
+        }
+        display.text = dropLast(display.text!)
+    }
+
     @IBAction func reset() {
         calculator.reset()
         history.text = ""
