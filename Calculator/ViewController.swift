@@ -42,7 +42,7 @@ class ViewController: UIViewController {
         } else {
             displayValue = 0
         }
-        history.text = "\(calculator)"
+        history.text = "\(calculator) ="
     }
 
     @IBAction func reset() {
