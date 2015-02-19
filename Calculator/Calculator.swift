@@ -39,6 +39,7 @@ class Calculator: Printable {
         learnOp(.UnaryOperator("sin", sin))
         learnOp(.UnaryOperator("cos", cos))
         learnOp(.UnaryOperator("√", sqrt))
+        learnOp(.UnaryOperator("±", -))
     }
 
     func pushOperand(operand: Double) {

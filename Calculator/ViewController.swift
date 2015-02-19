@@ -45,6 +45,13 @@ class ViewController: UIViewController {
         history.text = "\(calculator) ="
     }
 
+    @IBAction func plusMinus(sender: UIButton) {
+        if displayEmpty {
+            return operate(sender)
+        }
+        display.text = display.text!.hasPrefix("-") ? dropFirst(display.text!) : "-\(display.text!)"
+    }
+
     @IBAction func erase() {
         if displayEmpty || countElements(display.text!) < 2 {
             displayValue = 0
