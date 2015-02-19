@@ -19,6 +19,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        format.notANumberSymbol = "Err"
         format.numberStyle = NSNumberFormatterStyle.DecimalStyle
         point.setTitle(format.decimalSeparator, forState: UIControlState.Normal)
     }
