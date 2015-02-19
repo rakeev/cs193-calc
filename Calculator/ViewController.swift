@@ -4,12 +4,12 @@ class ViewController: UIViewController {
     @IBOutlet weak var display: UILabel!
     @IBOutlet weak var history: UILabel!
     @IBOutlet weak var point: UIButton!
-    private var displayValue: Double {
+    private var displayValue: Double? {
         get {
-            return format.numberFromString(display.text!)!.doubleValue
+            return display.text == nil ? nil : format.numberFromString(display.text!)?.doubleValue
         }
         set {
-            display.text = format.stringFromNumber(newValue)
+            display.text = newValue == nil ? nil : format.stringFromNumber(newValue!)
             displayEmpty = true
         }
     }
@@ -34,9 +34,11 @@ class ViewController: UIViewController {
     }
 
     @IBAction func enter() {
-        calculator.pushOperand(displayValue)
-        history.text = "\(calculator)"
-        displayEmpty = true
+        if let value = displayValue {
+            calculator.pushOperand(value)
+            history.text = "\(calculator)"
+            displayEmpty = true
+        }
     }
 
     @IBAction func operate(sender: UIButton) {
@@ -45,11 +47,7 @@ class ViewController: UIViewController {
             enter()
         }
         calculator.performOperation(operation)
-        if let result = calculator.evaluate() {
-            displayValue = result
-        } else {
-            displayValue = 0
-        }
+        displayValue = calculator.evaluate()
         history.text = "\(calculator) ="
     }
 
@@ -57,12 +55,14 @@ class ViewController: UIViewController {
         if displayEmpty {
             return operate(sender)
         }
-        display.text = display.text!.hasPrefix("-") ? dropFirst(display.text!) : "-\(display.text!)"
+        if let text = display.text {
+            display.text = text.hasPrefix("-") ? dropFirst(text) : "-\(text)"
+        }
     }
 
     @IBAction func erase() {
         if displayEmpty || countElements(display.text!) < 2 {
-            displayValue = 0
+            displayValue = nil
             return
         }
         display.text = dropLast(display.text!)
@@ -70,7 +70,7 @@ class ViewController: UIViewController {
 
     @IBAction func reset() {
         calculator.reset()
-        history.text = ""
-        displayValue = 0
+        history.text = nil
+        displayValue = nil
     }
 }
