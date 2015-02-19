@@ -3,24 +3,32 @@ import UIKit
 class ViewController: UIViewController {
     @IBOutlet weak var display: UILabel!
     @IBOutlet weak var history: UILabel!
+    @IBOutlet weak var point: UIButton!
     private var displayValue: Double {
         get {
-            return (display.text! as NSString).doubleValue
+            return format.numberFromString(display.text!)!.doubleValue
         }
         set {
-            display.text = "\(newValue)"
+            display.text = format.stringFromNumber(newValue)
             displayEmpty = true
         }
     }
     private var displayEmpty = true
     private var calculator = Calculator()
+    private var format = NSNumberFormatter()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        format.numberStyle = NSNumberFormatterStyle.DecimalStyle
+        point.setTitle(format.decimalSeparator, forState: UIControlState.Normal)
+    }
 
     @IBAction func appendDigit(sender: UIButton) {
         let digit = sender.currentTitle!
         if displayEmpty {
             display.text = digit
             displayEmpty = false
-        } else if digit != "." || display.text?.rangeOfString(digit) == nil {
+        } else if digit != format.decimalSeparator || display.text?.rangeOfString(digit) == nil {
             display.text = display.text! + digit
         }
     }

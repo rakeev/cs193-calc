@@ -10,7 +10,9 @@ class Calculator: Printable {
         var description: String {
             switch self {
             case .Operand(let operand):
-                return "\(operand)"
+                let format = NSNumberFormatter()
+                format.numberStyle = NSNumberFormatterStyle.DecimalStyle
+                return format.stringFromNumber(operand) ?? "�"
             case .Constant(let symbol, _):
                 return symbol
             case .UnaryOperator(let symbol, _):
