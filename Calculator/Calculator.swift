@@ -3,7 +3,7 @@ import Foundation
 class Calculator: Printable {
     private enum Op: Printable {
         case Operand(Double)
-        case Constant(String, Double)
+        case Variable(String)
         case UnaryOperator(String, Double -> Double)
         case BinaryOperator(String, (Double, Double) -> Double)
 
@@ -13,7 +13,7 @@ class Calculator: Printable {
                 let format = NSNumberFormatter()
                 format.numberStyle = NSNumberFormatterStyle.DecimalStyle
                 return format.stringFromNumber(operand) ?? "�"
-            case .Constant(let symbol, _):
+            case .Variable(let symbol):
                 return symbol
             case .UnaryOperator(let symbol, _):
                 return symbol
@@ -25,6 +25,8 @@ class Calculator: Printable {
 
     private var opStack = [Op]()
     private var knownOps = [String: Op]()
+    private var constants = ["π": M_PI]
+    var variables = [String: Double]()
     var description: String {
         return " ".join(opStack.map { "\($0)" })
     }
@@ -33,7 +35,6 @@ class Calculator: Printable {
         func learnOp(op: Op) {
             knownOps[op.description] = op
         }
-        learnOp(.Constant("π", M_PI))
         learnOp(.BinaryOperator("×", *))
         learnOp(.BinaryOperator("÷", /))
         learnOp(.BinaryOperator("+", +))
@@ -46,6 +47,10 @@ class Calculator: Printable {
 
     func pushOperand(operand: Double) {
         opStack.append(.Operand(operand))
+    }
+
+    func pushOperand(symbol: String) {
+        opStack.append(.Variable(symbol))
     }
 
     func performOperation(symbol: String) {
@@ -66,8 +71,8 @@ class Calculator: Printable {
             switch op {
             case .Operand(let operand):
                 return (operand, remainder)
-            case .Constant(_, let operand):
-                return (operand, remainder)
+            case .Variable(let symbol):
+                return (constants[symbol] ?? variables[symbol], remainder)
             case .UnaryOperator(_, let operation):
                 let (operand, remainder) = evaluate(remainder)
                 if let operand = operand {

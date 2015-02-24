@@ -42,6 +42,12 @@ class ViewController: UIViewController {
         }
     }
 
+    @IBAction func useVariable(sender: UIButton) {
+        var symbol = sender.currentTitle!
+        calculator.pushOperand(symbol)
+        history.text = "\(calculator)"
+    }
+
     @IBAction func operate(sender: UIButton) {
         var operation = sender.currentTitle!
         if !displayEmpty {
