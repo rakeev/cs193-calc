@@ -25,8 +25,8 @@ class Calculator: Printable {
 
     private var opStack = [Op]()
     private var knownOps = [String: Op]()
+    private var variables = [String: Double]()
     private var constants = ["π": M_PI]
-    var variables = [String: Double]()
     var description: String {
         return " ".join(opStack.map { "\($0)" })
     }
@@ -43,6 +43,14 @@ class Calculator: Printable {
         learnOp(.UnaryOperator("cos", cos))
         learnOp(.UnaryOperator("√", sqrt))
         learnOp(.UnaryOperator("±", -))
+    }
+
+    func getVariable(symbol: String) -> Double? {
+        return constants[symbol] ?? variables[symbol]
+    }
+
+    func setVariable(symbol: String, value: Double) {
+        variables[symbol] = value
     }
 
     func pushOperand(operand: Double) {
@@ -72,7 +80,7 @@ class Calculator: Printable {
             case .Operand(let operand):
                 return (operand, remainder)
             case .Variable(let symbol):
-                return (constants[symbol] ?? variables[symbol], remainder)
+                return (getVariable(symbol), remainder)
             case .UnaryOperator(_, let operation):
                 let (operand, remainder) = evaluate(remainder)
                 if let operand = operand {
@@ -87,6 +95,10 @@ class Calculator: Printable {
             }
         }
         return (nil, ops)
+    }
+
+    func clearVariables() {
+        variables.removeAll()
     }
 
     func reset() {
