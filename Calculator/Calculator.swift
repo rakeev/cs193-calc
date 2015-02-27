@@ -28,7 +28,14 @@ class Calculator: Printable {
     private var variables = [String: Double]()
     private var constants = ["π": M_PI]
     var description: String {
-        return " ".join(opStack.map { "\($0)" })
+        var result = [String]()
+        var desc: String
+        var ops = opStack
+        while !ops.isEmpty {
+            (desc, ops) = describe(ops)
+            result.insert(desc, atIndex: result.startIndex)
+        }
+        return ",".join(result)
     }
 
     init() {
@@ -95,6 +102,27 @@ class Calculator: Printable {
             }
         }
         return (nil, ops)
+    }
+
+    private func describe(ops: [Op]) -> (result: String, remainingOps: [Op]) {
+        if !ops.isEmpty {
+            var remainder = ops
+            let op = remainder.removeLast()
+            switch op {
+            case .Operand:
+                fallthrough
+            case .Variable:
+                return ("\(op)", remainder)
+            case .UnaryOperator:
+                let (operand, remainder) = describe(remainder)
+                return ("\(op)(\(operand))", remainder)
+            case .BinaryOperator:
+                let (opRight, remRight) = describe(remainder)
+                let (opLeft, remLeft) = describe(remRight)
+                return ("(\(opLeft)\(op)\(opRight))", remLeft)
+            }
+        }
+        return ("?", ops)
     }
 
     func clearVariables() {
