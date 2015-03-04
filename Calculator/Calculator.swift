@@ -5,7 +5,7 @@ class Calculator: Printable {
         case Operand(Double)
         case Variable(String)
         case UnaryOperator(String, Double -> Double)
-        case BinaryOperator(String, (Double, Double) -> Double)
+        case BinaryOperator(String, (Double, Double) -> Double, precedence: Int)
 
         var description: String {
             switch self {
@@ -17,8 +17,17 @@ class Calculator: Printable {
                 return symbol
             case .UnaryOperator(let symbol, _):
                 return symbol
-            case .BinaryOperator(let symbol, _):
+            case .BinaryOperator(let symbol, _, _):
                 return symbol
+            }
+        }
+
+        var precedence: Int {
+            switch self {
+            case .BinaryOperator(_, _, let level):
+                return level
+            default:
+                return 0
             }
         }
     }
@@ -42,10 +51,10 @@ class Calculator: Printable {
         func learnOp(op: Op) {
             knownOps[op.description] = op
         }
-        learnOp(.BinaryOperator("×", *))
-        learnOp(.BinaryOperator("÷", /))
-        learnOp(.BinaryOperator("+", +))
-        learnOp(.BinaryOperator("−", -))
+        learnOp(.BinaryOperator("×", *, precedence: 1))
+        learnOp(.BinaryOperator("÷", /, precedence: 1))
+        learnOp(.BinaryOperator("+", +, precedence: 2))
+        learnOp(.BinaryOperator("−", -, precedence: 2))
         learnOp(.UnaryOperator("sin", sin))
         learnOp(.UnaryOperator("cos", cos))
         learnOp(.UnaryOperator("√", sqrt))
@@ -93,7 +102,7 @@ class Calculator: Printable {
                 if let operand = operand {
                     return (operation(operand), remainder)
                 }
-            case .BinaryOperator(_, let operation):
+            case .BinaryOperator(_, let operation, _):
                 let (opRight, remRight) = evaluate(remainder)
                 let (opLeft, remLeft) = evaluate(remRight)
                 if opLeft != nil && opRight != nil {
