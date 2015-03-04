@@ -27,7 +27,7 @@ class Calculator: Printable {
             case .BinaryOperator(_, _, let level):
                 return level
             default:
-                return 0
+                return Int.max
             }
         }
     }
@@ -51,10 +51,10 @@ class Calculator: Printable {
         func learnOp(op: Op) {
             knownOps[op.description] = op
         }
-        learnOp(.BinaryOperator("×", *, precedence: 1))
-        learnOp(.BinaryOperator("÷", /, precedence: 1))
-        learnOp(.BinaryOperator("+", +, precedence: 2))
-        learnOp(.BinaryOperator("−", -, precedence: 2))
+        learnOp(.BinaryOperator("×", *, precedence: 2))
+        learnOp(.BinaryOperator("÷", /, precedence: 2))
+        learnOp(.BinaryOperator("+", +, precedence: 1))
+        learnOp(.BinaryOperator("−", -, precedence: 1))
         learnOp(.UnaryOperator("sin", sin))
         learnOp(.UnaryOperator("cos", cos))
         learnOp(.UnaryOperator("√", sqrt))
@@ -113,7 +113,7 @@ class Calculator: Printable {
         return (nil, ops)
     }
 
-    private func describe(ops: [Op]) -> (result: String, remainingOps: [Op]) {
+    private func describe(ops: [Op], precedence: Int = 0) -> (result: String, remainingOps: [Op]) {
         if !ops.isEmpty {
             var remainder = ops
             let op = remainder.removeLast()
@@ -126,9 +126,13 @@ class Calculator: Printable {
                 let (operand, remainder) = describe(remainder)
                 return ("\(op)(\(operand))", remainder)
             case .BinaryOperator:
-                let (opRight, remRight) = describe(remainder)
-                let (opLeft, remLeft) = describe(remRight)
-                return ("(\(opLeft)\(op)\(opRight))", remLeft)
+                let (opRight, remRight) = describe(remainder, precedence: op.precedence)
+                let (opLeft, remLeft) = describe(remRight, precedence: op.precedence)
+                var description = "\(opLeft)\(op)\(opRight)"
+                if precedence > op.precedence {
+                    description = "(\(description))"
+                }
+                return (description, remLeft)
             }
         }
         return ("?", ops)
