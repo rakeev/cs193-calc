@@ -79,11 +79,14 @@ class ViewController: UIViewController {
     }
 
     @IBAction func erase() {
-        if displayEmpty || countElements(display.text!) < 2 {
+        if displayEmpty {
+            calculator.undo()
+            evaluate()
+        } else if countElements(display.text!) > 1 {
+            display.text = dropLast(display.text!)
+        } else {
             displayValue = nil
-            return
         }
-        display.text = dropLast(display.text!)
     }
 
     @IBAction func reset() {

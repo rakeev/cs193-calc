@@ -146,4 +146,10 @@ class Calculator: Printable {
     func reset() {
         opStack.removeAll()
     }
+
+    func undo() {
+        if !opStack.isEmpty {
+            opStack.removeLast()
+        }
+    }
 }
