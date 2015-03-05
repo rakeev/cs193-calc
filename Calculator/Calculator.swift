@@ -121,14 +121,15 @@ class Calculator: Printable {
             case .Operand:
                 fallthrough
             case .Variable:
-                return ("\(op)", remainder)
+                // Shitty test runner does not expand "\(op)"
+                return (op.description, remainder)
             case .UnaryOperator:
                 let (operand, remainder) = describe(remainder)
                 return ("\(op)(\(operand))", remainder)
             case .BinaryOperator:
                 let (opRight, remRight) = describe(remainder, precedence: op.precedence)
                 let (opLeft, remLeft) = describe(remRight, precedence: op.precedence)
-                var description = "\(opLeft)\(op)\(opRight)"
+                var description = "\(opLeft)\(op.description)\(opRight)"
                 if precedence > op.precedence {
                     description = "(\(description))"
                 }
