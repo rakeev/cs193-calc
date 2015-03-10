@@ -125,7 +125,7 @@ class Calculator: Printable {
                 return (op.description, remainder)
             case .UnaryOperator:
                 let (operand, remainder) = describe(remainder)
-                return ("\(op)(\(operand))", remainder)
+                return ("\(op.description)(\(operand))", remainder)
             case .BinaryOperator:
                 let (opRight, remRight) = describe(remainder, precedence: op.precedence)
                 let (opLeft, remLeft) = describe(remRight, precedence: op.precedence)
