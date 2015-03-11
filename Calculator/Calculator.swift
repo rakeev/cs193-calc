@@ -46,6 +46,29 @@ class Calculator: Printable {
         }
         return ",".join(result)
     }
+    // PropertyList
+    var program: AnyObject {
+        get {
+            return opStack.map { $0.description }
+        }
+        set {
+            reset()
+            let format = NSNumberFormatter()
+            format.numberStyle = NSNumberFormatterStyle.DecimalStyle
+            if let opSymbols = newValue as? [String] {
+                for opSymbol in opSymbols {
+                    if performOperation(opSymbol) {
+                        continue
+                    }
+                    if let op = format.numberFromString(opSymbol)?.doubleValue {
+                        pushOperand(op)
+                    } else {
+                        pushOperand(opSymbol)
+                    }
+                }
+            }
+        }
+    }
 
     init() {
         func learnOp(op: Op) {
@@ -77,10 +100,12 @@ class Calculator: Printable {
         opStack.append(.Variable(symbol))
     }
 
-    func performOperation(symbol: String) {
+    func performOperation(symbol: String) -> Bool {
         if let operation = knownOps[symbol] {
             opStack.append(operation)
+            return true
         }
+        return false
     }
 
     func evaluate() -> Double? {
