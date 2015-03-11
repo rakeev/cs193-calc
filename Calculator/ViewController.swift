@@ -22,6 +22,17 @@ class ViewController: UIViewController {
         format.notANumberSymbol = "Err"
         format.numberStyle = NSNumberFormatterStyle.DecimalStyle
         point.setTitle(format.decimalSeparator, forState: UIControlState.Normal)
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if let program = defaults.arrayForKey("program") {
+            calculator.program = program
+            evaluate()
+        }
+    }
+
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setValue(calculator.program, forKey: "program")
     }
 
     @IBAction func appendDigit(sender: UIButton) {
