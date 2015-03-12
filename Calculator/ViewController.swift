@@ -6,22 +6,19 @@ class ViewController: UIViewController {
     @IBOutlet weak var point: UIButton!
     private var displayValue: Double? {
         get {
-            return display.text == nil ? nil : format.numberFromString(display.text!)?.doubleValue
+            return display.text == nil ? nil : Calculator.format.numberFromString(display.text!)?.doubleValue
         }
         set {
-            display.text = newValue == nil ? nil : format.stringFromNumber(newValue!)
+            display.text = newValue == nil ? nil : Calculator.format.stringFromNumber(newValue!)
             displayEmpty = true
         }
     }
     private var displayEmpty = true
     private var calculator = Calculator()
-    private var format = NSNumberFormatter()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        format.notANumberSymbol = "Err"
-        format.numberStyle = NSNumberFormatterStyle.DecimalStyle
-        point.setTitle(format.decimalSeparator, forState: UIControlState.Normal)
+        point.setTitle(Calculator.format.decimalSeparator, forState: UIControlState.Normal)
         let defaults = NSUserDefaults.standardUserDefaults()
         if let program = defaults.arrayForKey("program") {
             calculator.program = program
@@ -40,7 +37,7 @@ class ViewController: UIViewController {
         if displayEmpty {
             display.text = digit
             displayEmpty = false
-        } else if digit != format.decimalSeparator || display.text?.rangeOfString(digit) == nil {
+        } else if digit != Calculator.format.decimalSeparator || display.text?.rangeOfString(digit) == nil {
             display.text = display.text! + digit
         }
     }

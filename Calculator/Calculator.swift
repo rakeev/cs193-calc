@@ -1,6 +1,13 @@
 import Foundation
 
 class Calculator: Printable {
+    class var format: NSNumberFormatter {
+        let format = NSNumberFormatter()
+        format.numberStyle = .DecimalStyle
+        format.notANumberSymbol = "Err"
+        return format
+    }
+
     private enum Op: Printable {
         case Operand(Double)
         case Variable(String)
@@ -10,8 +17,6 @@ class Calculator: Printable {
         var description: String {
             switch self {
             case .Operand(let operand):
-                let format = NSNumberFormatter()
-                format.numberStyle = NSNumberFormatterStyle.DecimalStyle
                 return format.stringFromNumber(operand) ?? "�"
             case .Variable(let symbol):
                 return symbol
@@ -53,14 +58,12 @@ class Calculator: Printable {
         }
         set {
             reset()
-            let format = NSNumberFormatter()
-            format.numberStyle = NSNumberFormatterStyle.DecimalStyle
             if let opSymbols = newValue as? [String] {
                 for opSymbol in opSymbols {
                     if performOperation(opSymbol) {
                         continue
                     }
-                    if let op = format.numberFromString(opSymbol)?.doubleValue {
+                    if let op = Calculator.format.numberFromString(opSymbol)?.doubleValue {
                         pushOperand(op)
                     } else {
                         pushOperand(opSymbol)
