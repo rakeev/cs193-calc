@@ -1,13 +1,6 @@
 import Foundation
 
 class Calculator: Printable {
-    class var format: NSNumberFormatter {
-        let format = NSNumberFormatter()
-        format.numberStyle = .DecimalStyle
-        format.notANumberSymbol = "Err"
-        return format
-    }
-
     private enum Op: Printable {
         case Operand(Double)
         case Variable(String)
@@ -17,7 +10,7 @@ class Calculator: Printable {
         var description: String {
             switch self {
             case .Operand(let operand):
-                return format.stringFromNumber(operand) ?? "�"
+                return Formatter.toString(operand) ?? "�"
             case .Variable(let symbol):
                 return symbol
             case .UnaryOperator(let symbol, _):
@@ -63,7 +56,7 @@ class Calculator: Printable {
                     if performOperation(opSymbol) {
                         continue
                     }
-                    if let op = Calculator.format.numberFromString(opSymbol)?.doubleValue {
+                    if let op = Formatter.toDouble(opSymbol) {
                         pushOperand(op)
                     } else {
                         pushOperand(opSymbol)
@@ -179,5 +172,26 @@ class Calculator: Printable {
         if !opStack.isEmpty {
             opStack.removeLast()
         }
+    }
+}
+
+struct Formatter {
+    private static let format: NSNumberFormatter = {
+        let format = NSNumberFormatter()
+        format.numberStyle = .DecimalStyle
+        format.notANumberSymbol = "Err"
+        return format
+    }()
+
+    static var separator: String? {
+        return format.decimalSeparator
+    }
+
+    static func toDouble(value: String?) -> Double? {
+        return value == nil ? nil : format.numberFromString(value!)?.doubleValue
+    }
+
+    static func toString(value: Double?) -> String? {
+        return value == nil ? nil : format.stringFromNumber(value!)
     }
 }

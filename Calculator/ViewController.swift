@@ -6,10 +6,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var point: UIButton!
     private var displayValue: Double? {
         get {
-            return display.text == nil ? nil : Calculator.format.numberFromString(display.text!)?.doubleValue
+            return Formatter.toDouble(display.text)
         }
         set {
-            display.text = newValue == nil ? nil : Calculator.format.stringFromNumber(newValue!)
+            display.text = Formatter.toString(newValue)
             displayEmpty = true
         }
     }
@@ -18,7 +18,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        point.setTitle(Calculator.format.decimalSeparator, forState: UIControlState.Normal)
+        point.setTitle(Formatter.separator, forState: UIControlState.Normal)
         let defaults = NSUserDefaults.standardUserDefaults()
         if let program = defaults.arrayForKey("program") {
             calculator.program = program
@@ -37,7 +37,7 @@ class ViewController: UIViewController {
         if displayEmpty {
             display.text = digit
             displayEmpty = false
-        } else if digit != Calculator.format.decimalSeparator || display.text?.rangeOfString(digit) == nil {
+        } else if digit != Formatter.separator || display.text?.rangeOfString(digit) == nil {
             display.text = display.text! + digit
         }
     }
